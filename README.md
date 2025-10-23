@@ -1,5 +1,4 @@
 # College-Event-Management-System
-# College Events Management System
 
 A full-stack web application for managing college events with AI-powered recommendations.
 
@@ -25,12 +24,6 @@ A full-stack web application for managing college events with AI-powered recomme
 - MongoDB
 - Python 3.8+ (for AI features)
 
-### Installation
-
-1. **Clone and setup:**
-```bash
-unzip college-events-management-system.zip
-cd college-events-management-system
 
 college-events-management-system/
 ├── 📄 README.md
