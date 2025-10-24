@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Event Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body class="light-mode">
+    <header class="header">
+        <div class="container">
+            <div class="header-brand">
+                <div class="logo">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>CEMS</span>
+                </div>
+                <h1 class="college-name">University Event Hub</h1>
+            </div>
+            <nav class="nav">
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="btn btn-icon">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <a href="#" class="nav-link active" data-tab="login">Login</a>
+                <a href="#" class="nav-link" data-tab="register">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Welcome to University Event Hub</h1>
+                    <p class="hero-subtitle">Discover, Create, and Manage College Events</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>5000+ Students</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>200+ Events</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-star"></i>
+                            <span>50+ Clubs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <i class="fas fa-music"></i>
+                        <span>Music Fest</span>
+                    </div>
+                    <div class="floating-card">
+                        <i class="fas fa-laptop-code"></i>
+                        <span>Hackathon</span>
+                    </div>
+                    <div class="floating-card">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Sports Day</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="auth-container">
+                <!-- Login Form -->
+                <div id="login-tab" class="tab-content active">
+                    <h2>Login to Your Account</h2>
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="login-email" name="email" required>
+                            <div class="error-message" id="login-email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="login-password" name="password" required>
+                            <div class="error-message" id="login-password-error"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-tab" class="tab-content">
+                    <h2>Create New Account</h2>
+                    <form id="register-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="register-name">
+                                <i class="fas fa-user"></i>
+                                Full Name
+                            </label>
+                            <input type="text" id="register-name" name="name" required>
+                            <div class="error-message" id="register-name-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="register-email" name="email" required>
+                            <div class="error-message" id="register-email-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="register-password" name="password" required minlength="6">
+                            <div class="error-message" id="register-password-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-role">
+                                <i class="fas fa-user-tag"></i>
+                                Role
+                            </label>
+                            <select id="register-role" name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="STUDENT">Student</option>
+                                <option value="ORGANIZER">Organizer</option>
+                            </select>
+                            <div class="error-message" id="register-role-error"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-user-plus"></i>
+                            Register
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

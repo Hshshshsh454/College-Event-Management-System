@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - College Event Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="light-mode">
+    <header class="header">
+        <div class="container">
+            <div class="header-brand">
+                <div class="logo">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>CEMS</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="search-bar">
+                    <input type="text" id="global-search" placeholder="Search events...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="btn btn-icon">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="user-dropdown">
+                    <button class="user-trigger">
+                        <img src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" alt="User" class="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" data-action="profile">
+                            <i class="fas fa-user"></i>My Profile
+                        </a>
+                        <a href="#" class="dropdown-item" data-action="settings">
+                            <i class="fas fa-cog"></i>Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" data-action="logout">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container dashboard-container">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Main</h3>
+                        <button class="sidebar-link active" data-view="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        <button class="sidebar-link" data-view="browse-events">
+                            <i class="fas fa-calendar"></i>
+                            <span>Browse Events</span>
+                        </button>
+                        <button class="sidebar-link" data-view="ai-interests">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Interests</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section student-only">
+                        <h3 class="sidebar-title">Student</h3>
+                        <button class="sidebar-link" data-view="my-registrations">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>My Registrations</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section organizer-only">
+                        <h3 class="sidebar-title">Organizer</h3>
+                        <button class="sidebar-link" data-view="create-event">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Create Event</span>
+                        </button>
+                        <button class="sidebar-link" data-view="my-events">
+                            <i class="fas fa-list"></i>
+                            <span>My Events</span>
+                        </button>
+                        <button class="sidebar-link" data-view="organizer-analytics">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Analytics</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section admin-only">
+                        <h3 class="sidebar-title">Admin</h3>
+                        <button class="sidebar-link" data-view="pending-approvals">
+                            <i class="fas fa-clock"></i>
+                            <span>Pending Approvals</span>
+                        </button>
+                        <button class="sidebar-link" data-view="admin-analytics">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Analytics</span>
+                        </button>
+                        <button class="sidebar-link" data-view="user-management">
+                            <i class="fas fa-users-cog"></i>
+                            <span>User Management</span>
+                        </button>
+                    </div>
+                </nav>
+            </aside>
+
+            <section class="content">
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Loading...</p>
+                </div>
+
+                <!-- Dashboard Overview -->
+                <div id="dashboard-view" class="view active">
+                    <div class="view-header">
+                        <h2>Dashboard Overview</h2>
+                        <div class="view-actions">
+                            <button class="btn btn-secondary" id="refresh-dashboard">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-events">0</h3>
+                                <p>Total Events</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-registrations">0</h3>
+                                <p>My Registrations</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="upcoming-events">0</h3>
+                                <p>Upcoming Events</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="attendance-rate">0%</h3>
+                                <p>Attendance Rate</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-content">
+                        <div class="content-row">
+                            <div class="content-col">
+                                <div class="content-card">
+                                    <h3>Upcoming Events</h3>
+                                    <div id="upcoming-events-list" class="events-list">
+                                        <!-- Upcoming events will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-col">
+                                <div class="content-card">
+                                    <h3>Quick Actions</h3>
+                                    <div class="quick-actions">
+                                        <button class="quick-action" data-view="browse-events">
+                                            <i class="fas fa-search"></i>
+                                            <span>Browse Events</span>
+                                        </button>
+                                        <button class="quick-action student-only" data-view="my-registrations">
+                                            <i class="fas fa-ticket-alt"></i>
+                                            <span>My Tickets</span>
+                                        </button>
+                                        <button class="quick-action organizer-only" data-view="create-event">
+                                            <i class="fas fa-plus"></i>
+                                            <span>Create Event</span>
+                                        </button>
+                                        <button class="quick-action" data-view="ai-interests">
+                                            <i class="fas fa-robot"></i>
+                                            <span>AI Suggestions</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Browse Events View -->
+                <div id="browse-events-view" class="view">
+                    <div class="view-header">
+                        <h2>Browse Events</h2>
+                        <div class="view-actions">
+                            <div class="filters-bar">
+                                <select id="category-filter" class="filter-select">
+                                    <option value="">All Categories</option>
+                                    <option value="music">Music & Singing</option>
+                                    <option value="dance">Dance & Performing Arts</option>
+                                    <option value="sports">Sports & Fitness</option>
+                                    <option value="technology">Technology & Coding</option>
+                                    <option value="art">Art & Design</option>
+                                    <option value="academic">Academic & Workshops</option>
+                                    <option value="social">Social & Cultural</option>
+                                </select>
+                                <select id="sort-filter" class="filter-select">
+                                    <option value="newest">Newest First</option>
+                                    <option value="upcoming">Upcoming</option>
+                                    <option value="popular">Most Popular</option>
+                                </select>
+                                <button id="ai-suggestions-btn" class="btn btn-ai">
+                                    <i class="fas fa-robot"></i> AI Suggestions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="events-container" class="events-grid">
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- AI Interests View -->
+                <div id="ai-interests-view" class="view">
+                    <h2>AI Interest Detection</h2>
+                    <div class="ai-container">
+                        <div class="ai-card">
+                            <h3><i class="fas fa-robot"></i> Discover Your Event Interests</h3>
+                            <p>Our AI will analyze your preferences and suggest events you might like based on your interests in activities like dance, music, sports, technology, and more.</p>
+                            
+                            <div class="interest-form">
+                                <div class="form-group">
+                                    <label for="interest-input">Tell us what you're interested in:</label>
+                                    <textarea 
+                                        id="interest-input" 
+                                        placeholder="E.g., I love dancing, singing, playing basketball, coding workshops, art exhibitions..."
+                                        rows="4"
+                                    ></textarea>
+                                </div>
+                                <button id="analyze-interests-btn" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Analyze My Interests
+                                </button>
+                            </div>
+
+                            <div id="interest-results" class="interest-results hidden">
+                                <h4>Your Detected Interests:</h4>
+                                <div id="detected-interests" class="interests-tags"></div>
+                                
+                                <div class="ai-suggestions">
+                                    <h4>Recommended Events:</h4>
+                                    <div id="ai-suggested-events" class="events-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-card">
+                            <h3><i class="fas fa-chart-pie"></i> Your Interest Profile</h3>
+                            <div id="interest-profile">
+                                <p class="empty-state">No interests detected yet. Use the analyzer above to discover your interests!</p>
+                            </div>
+                            <div class="interest-chart">
+                                <canvas id="interest-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Registrations View -->
+                <div id="my-registrations-view" class="view">
+                    <div class="view-header">
+                        <h2>My Registrations</h2>
+                    </div>
+                    <div id="registrations-container" class="events-grid">
+                        <!-- Registered events will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Create Event View -->
+                <div id="create-event-view" class="view">
+                    <h2>Create New Event</h2>
+                    <form id="create-event-form" class="event-form">
+                        <div class="form-group">
+                            <label for="event-title">
+                                <i class="fas fa-heading"></i> Event Title
+                            </label>
+                            <input type="text" id="event-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-description">
+                                <i class="fas fa-align-left"></i> Description
+                            </label>
+                            <textarea id="event-description" name="description" rows="4" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-startTime">
+                                    <i class="fas fa-play"></i> Start Time
+                                </label>
+                                <input type="datetime-local" id="event-startTime" name="startTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-endTime">
+                                    <i class="fas fa-stop"></i> End Time
+                                </label>
+                                <input type="datetime-local" id="event-endTime" name="endTime" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-capacity">
+                                    <i class="fas fa-users"></i> Capacity
+                                </label>
+                                <input type="number" id="event-capacity" name="capacity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-venueId">
+                                    <i class="fas fa-map-marker-alt"></i> Venue ID (Optional)
+                                </label>
+                                <input type="text" id="event-venueId" name="venueId">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-category">
+                                <i class="fas fa-tag"></i> Category
+                            </label>
+                            <select id="event-category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="music">Music & Singing</option>
+                                <option value="dance">Dance & Performing Arts</option>
+                                <option value="sports">Sports & Fitness</option>
+                                <option value="technology">Technology & Coding</option>
+                                <option value="art">Art & Design</option>
+                                <option value="academic">Academic & Workshops</option>
+                                <option value="social">Social & Cultural</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-coverImage">
+                                <i class="fas fa-image"></i> Cover Image URL (Optional)
+                            </label>
+                            <input type="url" id="event-coverImage" name="coverImage" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-plus-circle"></i> Create Event
+                        </button>
+                    </form>
+                </div>
+
+                <!-- My Events View -->
+                <div id="my-events-view" class="view">
+                    <div class="view-header">
+                        <h2>My Events</h2>
+                    </div>
+                    <div id="my-events-container" class="events-grid">
+                        <!-- Organizer's events will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Organizer Analytics View -->
+                <div id="organizer-analytics-view" class="view">
+                    <h2>Organizer Analytics</h2>
+                    <div class="analytics-container">
+                        <div class="analytics-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="organizer-total-events">0</h3>
+                                    <p>Total Events</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="organizer-total-attendees">0</h3>
+                                    <p>Total Attendees</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="organizer-avg-attendance">0%</h3>
+                                    <p>Avg. Attendance</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analytics-charts">
+                            <div class="chart-card">
+                                <h3>Event Registrations</h3>
+                                <canvas id="organizer-registrations-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Category Distribution</h3>
+                                <canvas id="organizer-categories-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approvals View -->
+                <div id="pending-approvals-view" class="view">
+                    <h2>Pending Approvals</h2>
+                    <div id="pending-events-container" class="events-grid">
+                        <!-- Pending events will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Admin Analytics View -->
+                <div id="admin-analytics-view" class="view">
+                    <h2>Admin Analytics</h2>
+                    <div class="analytics-container">
+                        <div class="analytics-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="admin-total-events">0</h3>
+                                    <p>Total Events</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="admin-total-users">0</h3>
+                                    <p>Total Users</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 id="admin-approval-rate">0%</h3>
+                                    <p>Approval Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analytics-charts">
+                            <div class="chart-card">
+                                <h3>Events by Category</h3>
+                                <canvas id="admin-categories-chart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h3>Monthly Registrations</h3>
+                                <canvas id="admin-registrations-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management View -->
+                <div id="user-management-view" class="view">
+                    <h2>User Management</h2>
+                    <div class="user-management-container">
+                        <div class="search-bar">
+                            <input type="text" id="user-search" placeholder="Search users...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div id="users-container" class="users-grid">
+                            <!-- Users will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Profile Settings Modal -->
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Profile Settings</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profile-form" class="profile-form">
+                    <div class="form-group">
+                        <label for="profile-name">Name</label>
+                        <input type="text" id="profile-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-email">Email</label>
+                        <input type="email" id="profile-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-phone">Phone</label>
+                        <input type="tel" id="profile-phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-avatar">Avatar URL</label>
+                        <input type="url" id="profile-avatar" name="avatar">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div id="event-modal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="event-modal-title">Event Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="event-modal-content">
+                    <!-- Event details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
